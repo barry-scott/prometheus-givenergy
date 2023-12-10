@@ -15,4 +15,5 @@ tmp.dev.venv/bin/python -m pip install --quiet \
 tmp.dev.venv/bin/python -m pip list
 
 echo
+echo PY=${PY}
 echo PYTHONPATH=src \${PY} -m prometheus_givenergy "$@"
