@@ -100,8 +100,13 @@ class PrometheusGivEnergy:
                 metric_name = f'givenergy_{metric.name}'
             else:
                 metric_name = f'givenergy_{metric.name}_{metric.unit}'
-            print(f'# TYPE {metric_name} {metric.prom_type}', file=f)
-            print(f'{metric_name} {metric.value}', file=f)
+
+            if type(metric.value) in (int, float):
+                print(f'# TYPE {metric_name} {metric.prom_type}', file=f)
+                print(f'{metric_name} {metric.value}', file=f)
+
+            else:
+                print(f'# COMMENT {metric_name} {metric.value}', file=f)
 
 class GivEnergyRequest:
     data_adapter_serial_number = 'AB1234G567'  # must be 10 bytes long
