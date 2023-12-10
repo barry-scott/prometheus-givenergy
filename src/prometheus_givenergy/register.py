@@ -129,7 +129,7 @@ class ModbusRegisterConversion:
         elif rtype == Encoding.ASCII:
             v = []
             for part in [register] + more:
-                register_store[part].to_bytes(2, byteorder='big').decode(encoding='ascii')
+                v.append(register_store[part].to_bytes(2, byteorder='big').decode(encoding='ascii'))
 
             v = ''.join(v)
 
