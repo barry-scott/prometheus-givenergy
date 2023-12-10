@@ -9,7 +9,10 @@ rm -rf tmp.dev.venv
 echo "Info: Installing development libs into venv..."
 PY=${PWD}/tmp.dev.venv/bin/python
 tmp.dev.venv/bin/python -m pip install --quiet \
-    pymodbus
+    pymodbus \
+    crccheck
 
-set -x
-PYTHONPATH=src \${PY} -m prometheus_givenergy "$@"
+tmp.dev.venv/bin/python -m pip list
+
+echo
+echo PYTHONPATH=src \${PY} -m prometheus_givenergy "$@"
