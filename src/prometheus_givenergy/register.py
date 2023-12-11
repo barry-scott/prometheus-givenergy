@@ -48,7 +48,7 @@ class Encoding(Enum):
 
 class Type(Enum):
     COUNTER = 'counter'
-    GUAGE = 'guage'
+    GAUGE = 'gauge'
 
 class Metric:
     def __init__(self, name, value, unit, prom_type):
@@ -77,7 +77,7 @@ class ModbusRegisterConversion:
         unit = rd.get('unit', Unit.SCALAR)
         more = rd.get('more')
         writable = rd.get('write_safe', False)
-        prom_type = rd.get('prometheus', 'guage')
+        prom_type = rd.get('prometheus', 'gauge')
         true_value = rd.get('true_value', 1)
 
         v = register_store[register]

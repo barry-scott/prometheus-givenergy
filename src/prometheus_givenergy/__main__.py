@@ -3,8 +3,8 @@ import sys
 import prometheus_givenergy
 
 
-def main( argv ):
-    arg_iter = iter(argv)
+def main():
+    arg_iter = iter(sys.argv)
 
     progname = next(arg_iter)
 
@@ -58,4 +58,4 @@ def main( argv ):
     return 0
 
 if __name__ == '__main__':
-    sys.exit( main( sys.argv ) )
+    sys.exit(main())
