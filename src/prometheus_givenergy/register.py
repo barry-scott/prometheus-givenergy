@@ -388,9 +388,9 @@ class GivEnergyInputRegisterConversion(ModbusRegisterConversion):
         15: {'name': 'highbrigh_bus'},    # high voltage bus?
         16: {'name': 'inverter_out', 'type': Encoding.POWER_FACTOR},  # should be F_? seems to be hovering between 4800-5400
         17: {'name': 'pv1_day', 'scaling': Scaling.DECI, 'unit': Unit.ENERGY_KWH},
-        18: {'name': 'pv1', 'unit': Unit.POWER_KW},
+        18: {'name': 'pv1', 'unit': Unit.POWER_W},
         19: {'name': 'pv2_day', 'scaling': Scaling.DECI, 'unit': Unit.ENERGY_KWH},
-        20: {'name': 'pv2', 'unit': Unit.POWER_KW},
+        20: {'name': 'pv2', 'unit': Unit.POWER_W},
         21: {'name': 'grid_out_total', 'prometheus': 'counter', 'type': Encoding.UINT32_HIGH, 'scaling': Scaling.DECI, 'unit': Unit.ENERGY_KWH, 'more': 22},
         22: {'cont': 'grid_out_total'},
         23: {'name': 'solar_diverter', 'scaling': Scaling.DECI, 'unit': Unit.ENERGY_KWH},
