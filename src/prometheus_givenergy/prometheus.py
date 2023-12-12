@@ -66,9 +66,12 @@ class PrometheusGivEnergy:
         self.debug(f'transaction {label} payload len={len(payload)} {hex_string(payload)}')
         response = GivEnergyResponse(self, payload)
         self.debug(f'transaction {label} {response.data_adapter_serial_number} {response.error}')
-        if not response.error:
-            for reg in range(request.base_register, request.base_register + request.register_count):
-                self.debug(f'transaction {label} register {reg}: {response.register(reg):#06x} ({response.register(reg)})')
+        if response.error:
+            print(f'Error: response error for request {request!r}', file=sys.stderr)
+            return response
+
+        for reg in range(request.base_register, request.base_register + request.register_count):
+            self.debug(f'transaction {label} register {reg}: {response.register(reg):#06x} ({response.register(reg)})')
 
         return response
 
@@ -132,6 +135,9 @@ class GivEnergyRequest:
         assert 0 <= self.base_register <= 255
         self.register_count = register_count
         assert 1 <= self.register_count <= (255-self.base_register)
+
+    def __repr__(self):
+        return f'<GivEnergyRequest: function_code {self.function_code} base_register {self.base_register} register_count {self.register_count}'
 
     def encode(self):
         b = pymodbus.payload.BinaryPayloadBuilder(byteorder=pymodbus.constants.Endian.BIG)
