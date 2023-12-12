@@ -76,6 +76,7 @@ class ModbusRegisterConversion:
         scale = rd.get('scaling', Scaling.UNIT)
         unit = rd.get('unit', Unit.SCALAR)
         more = rd.get('more')
+        negative_name = rd.get('negative')
         writable = rd.get('write_safe', False)
         prom_type = rd.get('prometheus', 'gauge')
         true_value = rd.get('true_value', 1)
@@ -142,6 +143,10 @@ class ModbusRegisterConversion:
 
         else:
             raise RuntimeError(f'Encoding {rtype} unsupported for register {register} ("{name}")')
+
+        # split into 2 metrics one for the +ive and one of the -ive value
+        if negative_name is not None:
+            return [Metric(name, max( 0.0, v), unit, prom_type), Metric(negative_name, 0.0-min( 0.0, v), unit, prom_type)]
 
         return [Metric(name, v, unit, prom_type)]
 
@@ -400,7 +405,7 @@ class GivEnergyInputRegisterConversion(ModbusRegisterConversion):
         27: {'name': 'inverter_in_total', 'prometheus': 'counter', 'type': Encoding.UINT32_HIGH, 'scaling': Scaling.DECI, 'unit': Unit.ENERGY_KWH, 'more': 28},
         28: {'cont': 'inverter_in_total'},
         29: {'name': 'discharge_year', 'scaling': Scaling.DECI, 'unit': Unit.ENERGY_KWH},
-        30: {'name': 'grid_out', 'type': Encoding.INT16, 'unit': Unit.POWER_W},
+        30: {'name': 'grid_out', 'type': Encoding.INT16, 'unit': Unit.POWER_W, 'negative': 'grid_in'},
         31: {'name': 'eps_backup', 'unit': Unit.POWER_W},
         32: {'name': 'grid_in_total', 'prometheus': 'counter', 'type': Encoding.UINT32_HIGH, 'scaling': Scaling.DECI, 'unit': Unit.ENERGY_KWH, 'more': 33},
         33: {'cont': 'grid_in_total',},
@@ -421,8 +426,8 @@ class GivEnergyInputRegisterConversion(ModbusRegisterConversion):
         48: {'cont': 'work_time_total'},
         49: {'name': 'system_mode'},  # 0:offline, 1:grid-tied
         50: {'name': 'battery', 'scaling': Scaling.CENTI, 'unit': Unit.VOLTAGE_V},
-        51: {'name': 'battery', 'type': Encoding.INT16, 'scaling': Scaling.CENTI, 'unit': Unit.CURRENT_A},
-        52: {'name': 'battery', 'type': Encoding.INT16, 'unit': Unit.POWER_W},
+        51: {'name': 'battery_discharge', 'type': Encoding.INT16, 'scaling': Scaling.CENTI, 'unit': Unit.CURRENT_A, 'negative': 'battery_charge'},
+        52: {'name': 'battery_discharge', 'type': Encoding.INT16, 'unit': Unit.POWER_W, 'negative': 'battery_charge'},
         53: {'name': 'eps_backup', 'scaling': Scaling.DECI, 'unit': Unit.VOLTAGE_V},
         54: {'name': 'eps_backup', 'scaling': Scaling.CENTI, 'unit': Unit.FREQUENCY_HZ},
         55: {'name': 'charger', 'scaling': Scaling.DECI, 'unit': Unit.TEMPERATURE_C},
